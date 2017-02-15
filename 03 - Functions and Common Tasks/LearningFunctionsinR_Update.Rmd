@@ -24,7 +24,8 @@ Genevieve Nuttall
 
 In R, functions are extremely important. Every command that you run is probably a set of functions that someone else created for you to use. Every package is jammed full of tons of functions that we are able to call with a simple command. 
 
-For example, when you type mean(x), R will give you back a number. The only reason it can do this is because the mean() command has been programmed to execute a specific function. Take a look:
+For example, when you type mean(x), R will give you back a number. The only reason it can do this is because the mean() command has been programmed to execute a specific function. 
+Take a look at what makes up the function *var*:
 
 ```{r}
 
@@ -32,8 +33,7 @@ For example, when you type mean(x), R will give you back a number. The only reas
 
 var
 
-# If you run this, you will see the basic syntax of the function that runs when you run the 
-# var() command, where the function is stored, and what it is named as ("var" in this case). 
+# If you run this, you will see the basic syntax of the function that runs when you run the var() command, where the function is stored, and what it is named as ("var" in this case). 
 # Pretty cool!
 
 ```
@@ -58,6 +58,7 @@ mean(1:10)
 log(16)
 
 sqrt(36)
+
 
 ###### Plotting functions
 
@@ -87,6 +88,8 @@ plot(peak1.standard$Wavelength,peak1.standard$mAU,xlim=c(350,800), type="l", pch
 # Let's use the smooth.spline function to smooth this line out.
 smooth.peak1.standard<-smooth.spline(peak1.standard$Wavelength, peak1.standard$mAU)
 # Now plot the smooth line over the noisy line to see how well it fits
+
+## Highlight and run all three lines at same time
 plot(peak1.standard$Wavelength,peak1.standard$mAU,xlim=c(350,800), type="l", pch=1,cex=0.6,las=TRUE, 
      ylab="Intensity (mAU)",ylim=c(0,110),xlab="Wavelength (nm)")
 lines(smooth.peak1.standard)
@@ -94,6 +97,9 @@ lines(smooth.peak1.standard)
 
 # Remember, these look like simple commands but they are actually functions 
 # that have been built into the software for us. Thanks, R! 
+
+# Look at what makes up the function smooth.spline
+smooth.spline
 ```
 
 
@@ -108,8 +114,8 @@ This will be useful to you at some point when you need to make a specific functi
 In R, there is a basic format for writing a function:
 
 
-**function <- functionname(argument1,argument2){body of function}**
-
+**function_name <- function(argument1,argument2){body of function}**
+*"function"" is a keyword here - reserved for defining functions*
 
 There are three components to this command:
 1. formal arguments (in parentheses)
@@ -140,11 +146,21 @@ fun_function(3)
 
 Now, let's try something more complicated.
 ```{r}
-absolutely<-function(x){if(x<0){-x}else{x}}
+absolutely<-function(x)
+{
+  if(x<0){
+    -x
+    }
+  else{
+    x
+  }
+}
 
 # This code tells us that if an x value is less than 1, then this negative value should 
 # be converted to positive
 # AKA an absolute value function
+# if evaluates a condition (x<0) - if a value fits this condition, then it will execute the body of the if clause then comes next {-x}, so R will make the value a -(-x), or positive x
+# if the value doesn't fit the condition of x<0, then it moves to the else clause {x} so then R will just return the positive values
 
 # Try it!
 absolutely(-7)
@@ -163,8 +179,7 @@ print(paste("My favorite food is", food))}
 ## Hopefully I covered one of your fav foods here, I'm really sorry if not.
 
 ## This is a silly example, but it shows you exactly what's going on with the loop. 
-## In the body, it's taking the text "My favorite food is" and linking it to the arguments 
-# specified as "food" arguments. 
+## In the body, it's taking the text "My favorite food is" and linking it to the arguments specified as "food" arguments. 
 ## Each line represents a new loop, and the function will continue until it runs out of arguments.
 ```
 
@@ -181,28 +196,15 @@ vector1<-c(3,5,6,9,8,11,15,16,22,23)
 
 condition<-0
 
-## Okay, now we're going to write a loop that counts the total number of odd values in our vector:
+## Okay, now we're going to write a loop that counts the total number of even values in our vector:
 
-for(val in vector1){print(if (val %% 2) condition=condition+1)}
-## Should spit back to you the odd numbers
-
-# An alternative way of writing it where print(condition) tells you the total number of odd values
-
-vector1 <- c(3,5,6,9,8,11,15,16,22,23)
-condition <- 0
-
-for(val in vector1){if (val %% 2==0) condition <- condition+1
-print(condition)}
+for(val in vector1){if (val %% 2==0) condition=condition+1}
 print(condition)
 
 # In this loop, "val" corresponds to each values in our vector
-# The body is telling R to exclude any values that are multiples of 
-# two in the vector (indicated by %%)
-# The initial condition is 0, so each time the loop runs, it is cycling 
-# through the next value until all 8 values have been processed.
-# The loop runs eight iterations (one of each value in our vector)
-# For each value, it will return a TRUE or FALSE, and counts the number 
-# of TRUEs when we make the command print()
+# val %% 2 tells R to check the remainder of each value in the vector when divided by 2
+# then, this remainder is compared to 0, and if it is 0, then R will evaluate it as TRUE 
+# by printing the condition, it tells you how many TRUE values were processed in the loop
 
 ```
 
@@ -213,8 +215,6 @@ You can also create nested for loops which are loops inside of loops if you need
 # Let's make a 10 x 10 matrix and fill it using a nested for loop
 matrix1 <- matrix(nrow=5, ncol=6)
 matrix1 ## you can see it's empty right now
-dim(matrix1)
-dim(matrix1)
 
 # This loop will assign values in each row/column based on the 
 # product of the i and j values that we specify here:
@@ -226,7 +226,7 @@ for(i in 1:dim(matrix1)[1]) {
 # cell that is the product of the corresponding product 
 # of row and column and this code is repeated until all cells are filled
 
-# [1] is just an index that corresponds rows, [2] to columns
+# [1] is just an index that corresponds to rows, [2] to columns
 
 # It's "nested" because you have a for() command within another for() command
 
@@ -249,5 +249,4 @@ In some cases, it might be easier to use an apply() function which can act as a 
 > Remember, R is a world of functions. The ones we covered today are just a small percentage of what is out there on R. 
 
 To go over more commonly used fuctions, view this [list of functions](http://www.sr.bham.ac.uk/~ajrs/R/r-function_list.html)
-
 
